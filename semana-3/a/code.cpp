@@ -5,10 +5,10 @@ using namespace std;
 using ll = unsigned long long;
 
 map<int, set<int>> restr;
-set<int> repet;
+unordered_set<int> repet;
 int n;
 
-void printResult(vector<int> &result){
+void printResult(int *result){
     for (int i = 0; i < n ; i++) {
         cout << result[i];
         
@@ -27,7 +27,7 @@ bool podePor(int j){
     return true;
 }
 
-void backt(int i, vector<int> &result){
+void backt(int i, int *result){
     if (i == n) {
         printResult(result);
         return;
@@ -40,6 +40,7 @@ void backt(int i, vector<int> &result){
                 repet.insert(j);
                 backt(i + 1, result);
                 repet.erase(j);
+                result[i] = 0;
             }
         }
     }
@@ -52,7 +53,7 @@ int main() {
     int c;
     cin >> n >> c;
 
-    vector<int> result(n);
+    int result[n];
 
     for (int i = 0; i < c; i++) { 
         int x, y; 

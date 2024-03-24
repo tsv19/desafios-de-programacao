@@ -2,47 +2,59 @@
 
 using namespace std;
 
-using ll =  long long;
+using ll = long long;
+
+ll minDiff = LLONG_MAX;
+
+int n;
+
+
+void calculaDiff(vector<ll> &v, vector<bool> &used){
+    ll sum1 = 0, sum2 = 0;
+    for (int i = 0; i < n; i++){
+        if (used[i]){
+            sum1 += v[i];
+        }
+        else {
+            sum2 += v[i];
+        }
+    }
+
+    minDiff = min(minDiff, abs(sum1-sum2));
+}
+
+void backt(int x, vector<ll> &v, vector<bool> &used){
+    if ( x == n ){
+        calculaDiff(v, used);
+        return;
+    }
+
+    for (int i = x; i < n; i++){
+        used[i] = true;
+        backt(i+1, v, used);
+        used[i] = false;
+    }
+}
 
 
 int main() {
     cin.tie(0);
     ios_base::sync_with_stdio(0);
 
-    ll pilha1 = 0, pilha2 = 0; 
-    int n;
     cin >> n;
 
-    // while (n--){
-    //     ll x;
-    //     cin >> x;
-
-    //     max(pilha1-pilha2, pilha2-pilha1);
-    // }
+    vector<ll> v(n);
+    vector<bool> used(n);
 
 
-    priority_queue<ll> pq;
-
-    for (int i = 0; i < n; i++) {
-        ll x;
+    for (auto &x : v){
         cin >> x;
-        pq.push(x);
     }
 
-
-    ll a = 0;
-    while (!pq.empty()) {
-        ll x = pq.top();
-        pq.pop();
-
-        a = a - x;
-
-        if ( a < 0 ){
-            a *= -1;
-        } 
-
-        cout << a << " " << x << endl;
+    for (int i = 0; i < n; i++){
+        backt(i, v, used);
+        used[i] = true;
     }
 
-    cout << a << endl;
+    cout << minDiff << endl;
 }
